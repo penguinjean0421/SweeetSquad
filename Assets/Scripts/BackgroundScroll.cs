@@ -3,18 +3,41 @@ using UnityEngine;
 public class BackgroundScroll : MonoBehaviour
 {
     public Transform player;
+    public Transform mainCamera;
+
     public float scrollSpeed = 0.1f;
+
     Material backgroundMaterial;
+    float lastCameraX;
 
     void Awake()
     {
         backgroundMaterial = GetComponent<Renderer>().material;
     }
 
-    void Update()
+    void Start()
     {
-        float offset = player.position.x * scrollSpeed;
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main.transform;
+        }
 
-        backgroundMaterial.SetTextureOffset("_BaseMap", new Vector2(offset, 0));
+        lastCameraX = mainCamera.position.x;
+    }
+
+    void LateUpdate()
+    {
+        if (player == null || mainCamera == null) { return; }
+
+
+        float cameraMovementX = mainCamera.position.x - lastCameraX;
+
+        transform.position = new Vector3(mainCamera.position.x, transform.position.y, transform.position.z);
+
+        Vector2 offset = backgroundMaterial.GetTextureOffset("_BaseMap");
+        offset.x += cameraMovementX * scrollSpeed;
+        backgroundMaterial.SetTextureOffset("_BaseMap", offset);
+
+        lastCameraX = mainCamera.position.x;
     }
 }

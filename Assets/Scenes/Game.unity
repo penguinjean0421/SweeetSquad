@@ -5323,7 +5323,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BackgroundScroll
   player: {fileID: 1083927422}
-  scrollSpeed: 0.01
+  mainCamera: {fileID: 519420032}
+  scrollSpeed: 0.1
 --- !u!1 &2100929723
 GameObject:
   m_ObjectHideFlags: 0
