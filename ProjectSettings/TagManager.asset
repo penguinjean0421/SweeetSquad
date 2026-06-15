@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Spike
   - Item
+  - DeadZone
   layers:
   - Default
   - TransparentFX

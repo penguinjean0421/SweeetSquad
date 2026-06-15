@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
+    [Header("Infi")]
+    public float invincibilityTime = 3f;
+
     PlayerAnimation playerAnimation;
 
     Rigidbody2D rigid;
@@ -32,7 +35,7 @@ public class PlayerHealth : MonoBehaviour
 
         playerAnimation.PlayDamagedAnimation();
 
-        Invoke(nameof(OffDamaged), 3f);
+        Invoke(nameof(OffDamaged), invincibilityTime);
     }
 
     void OffDamaged()

@@ -2,19 +2,36 @@ using UnityEngine;
 
 public class PlayerInteraction : MonoBehaviour
 {
+    public int stageClearScore;
+
     PlayerHealth playerHealth;
     PlayerMovement playerMovement;
 
+    Rigidbody2D rigid;
+
+    int playerDamagedLayer;
+
     void Awake()
     {
+        rigid = GetComponent<Rigidbody2D>();
+
         playerHealth = GetComponent<PlayerHealth>();
         playerMovement = GetComponent<PlayerMovement>();
+
+        playerDamagedLayer = LayerMask.NameToLayer("PlayerDamaged");
     }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Item")) { HandleItem(collision.gameObject); }
-        else if (collision.CompareTag("Finish")) { GameManager.instance.NextStage(); }
+
+        else if (collision.CompareTag("Finish"))
+        {
+            GameManager.instance.score += stageClearScore;
+            UIManager.instance.UpdateScore(GameManager.instance.score);
+
+            GameManager.instance.NextStage();
+        }
 
         if (collision.CompareTag("DeadZone"))
         {
@@ -28,9 +45,7 @@ public class PlayerInteraction : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        Rigidbody2D rigid = GetComponent<Rigidbody2D>();
-
-        if (collision.gameObject.CompareTag("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy") && collision.gameObject.layer != playerDamagedLayer)
         {
             if (rigid.linearVelocity.y < 0 && transform.position.y > collision.transform.position.y)
             {
@@ -42,7 +57,7 @@ public class PlayerInteraction : MonoBehaviour
             }
         }
 
-        if (collision.gameObject.CompareTag("Spike"))
+        if (collision.gameObject.CompareTag("Spike") && collision.gameObject.layer != playerDamagedLayer)
         {
             playerHealth.OnDamaged(collision.transform.position);
         }

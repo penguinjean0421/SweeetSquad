@@ -13,19 +13,19 @@ public class UIManager : MonoBehaviour
     public GameObject gameOverUI;
     public GameObject gameClearUI;
 
-    [Header("Score")]
-    public Text scoreText;
-    public Text totalScoreText;
-
     [Header("HP")]
     public GameObject heartPrefab;
     public Transform heartParent;
-    public Sprite brokenHeart;
     public Sprite fullHeart;
+    public Sprite brokenHeart;
     List<Image> heartImagesList = new List<Image>();
 
     [Header("Level")]
     public Text stageText;
+
+    [Header("Score")]
+    public Text scoreText;
+    public Text totalScoreText;
 
     void Awake()
     {
@@ -52,8 +52,8 @@ public class UIManager : MonoBehaviour
         for (int i = 0; i < maxHp; i++)
         {
             GameObject newHeart = Instantiate(heartPrefab, heartParent);
-
             Image heartImage = newHeart.GetComponent<Image>();
+
             if (heartImage != null)
             {
                 heartImage.sprite = fullHeart;
@@ -91,7 +91,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateStage(int now)
     {
-        // stageText.text = $"Stage : {now + 1}";
+        stageText.text = $"Stage : {now + 1}";
     }
 
     public void ShowGameOver()

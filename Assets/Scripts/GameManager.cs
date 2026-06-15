@@ -42,12 +42,11 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         currentHealth = maxHealth;
 
-        stages[stageIndex].SetActive(true);
-
+        UIManager.instance.InitHearts(currentHealth);
         UIManager.instance.UpdateStage(stageIndex);
+        UIManager.instance.UpdateScore(score);
 
-        // UIManager.instance.InitHearts(currentHealth);
-
+        stages[stageIndex].SetActive(true);
         player.SetActive(true);
     }
 
@@ -77,7 +76,7 @@ public class GameManager : MonoBehaviour
         if (currentHealth > 1)
         {
             currentHealth--;
-            // UIManager.instance.UpdateHp(health);
+            UIManager.instance.UpdateHp(currentHealth);
         }
         else { GameOver(); }
     }
