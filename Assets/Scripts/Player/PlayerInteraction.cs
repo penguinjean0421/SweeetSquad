@@ -27,6 +27,8 @@ public class PlayerInteraction : MonoBehaviour
 
         else if (collision.CompareTag("Finish"))
         {
+            // 파티클 실행
+
             GameManager.instance.score += stageClearScore;
             UIManager.instance.UpdateScore(GameManager.instance.score);
 
@@ -51,13 +53,13 @@ public class PlayerInteraction : MonoBehaviour
             {
                 OnAttack(collision.transform);
             }
-            else
+            else if (!playerHealth.isInvincible)
             {
                 playerHealth.OnDamaged(collision.transform.position);
             }
         }
 
-        if (collision.gameObject.CompareTag("Spike") && collision.gameObject.layer != playerDamagedLayer)
+        if (collision.gameObject.CompareTag("Spike") && collision.gameObject.layer != playerDamagedLayer && !playerHealth.isInvincible)
         {
             playerHealth.OnDamaged(collision.transform.position);
         }
@@ -76,6 +78,8 @@ public class PlayerInteraction : MonoBehaviour
 
     void HandleItem(GameObject item)
     {
+        // 파티클 실행
+
         if (item.TryGetComponent<IItemEffect>(out var itemEffect)) { itemEffect.ApplyEffect(); }
 
         item.SetActive(false);

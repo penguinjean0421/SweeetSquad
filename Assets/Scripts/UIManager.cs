@@ -10,8 +10,11 @@ public class UIManager : MonoBehaviour
     [Header("Game UI")]
     public GameObject gameStartUI;
     public GameObject inGameUI;
-    public GameObject gameOverUI;
-    public GameObject gameClearUI;
+    public GameObject gameEndUI;
+
+    [Header("GameEnd")]
+    public GameObject gameClear;
+    public GameObject gameOver;
 
     [Header("HP")]
     public GameObject heartPrefab;
@@ -25,7 +28,6 @@ public class UIManager : MonoBehaviour
 
     [Header("Score")]
     public Text scoreText;
-    public Text totalScoreText;
 
     void Awake()
     {
@@ -42,8 +44,10 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         inGameUI.SetActive(false);
-        gameOverUI.SetActive(false);
-        gameClearUI.SetActive(false);
+
+        gameClear.SetActive(false);
+        gameOver.SetActive(false);
+        gameEndUI.SetActive(false);
     }
 
     #region  Heart
@@ -84,11 +88,6 @@ public class UIManager : MonoBehaviour
         scoreText.text = $"Score: {score}";
     }
 
-    public void UpdateTotalScore(int score)
-    {
-        totalScoreText.text = $"Score: {score}";
-    }
-
     public void UpdateStage(int now)
     {
         stageText.text = $"Stage : {now + 1}";
@@ -97,13 +96,17 @@ public class UIManager : MonoBehaviour
     public void ShowGameOver()
     {
         inGameUI.SetActive(false);
-        gameOverUI.SetActive(true);
+        gameOver.SetActive(true);
+        gameEndUI.SetActive(true);
+
     }
 
     public void ShowGameClear()
     {
         inGameUI.SetActive(false);
-        gameClearUI.SetActive(true);
+        gameClear.SetActive(true);
+        gameEndUI.SetActive(true);
+
     }
 
 

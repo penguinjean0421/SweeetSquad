@@ -1,9 +1,14 @@
+using System.Collections;
+using NUnit.Framework;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    [Header("Infi")]
+    public bool isInvincible { get; private set; } = false;
+
+    [Header("Damaged")]
     public float invincibilityTime = 3f;
+    public float damageCooldown = 1f;
 
     PlayerAnimation playerAnimation;
 
@@ -25,6 +30,10 @@ public class PlayerHealth : MonoBehaviour
 
     public void OnDamaged(Vector2 targetPos)
     {
+        if (isInvincible) { return; }
+
+        StartCoroutine(InvincibleCooldownCo());
+
         GameManager.instance.HealthDown();
         gameObject.layer = damagedLayer; // 무적 레이어로 변경
         spriteRenderer.color = new Color(1, 1, 1, 0.4f); // 투명화
@@ -38,10 +47,19 @@ public class PlayerHealth : MonoBehaviour
         Invoke(nameof(OffDamaged), invincibilityTime);
     }
 
+    IEnumerator InvincibleCooldownCo()
+    {
+        isInvincible = true;
+
+        yield return new WaitForSeconds(damageCooldown);
+
+        isInvincible = false;
+    }
+
     void OffDamaged()
     {
-        gameObject.layer = playerLayer; // 원래 레이어로 복구
-        spriteRenderer.color = new Color(1, 1, 1, 1f); // 불투명화
+        gameObject.layer = playerLayer;
+        spriteRenderer.color = new Color(1, 1, 1, 1f);
     }
 
     public void OnDie()

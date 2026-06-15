@@ -67,7 +67,6 @@ public class GameManager : MonoBehaviour
         {
             Time.timeScale = 0f;
             UIManager.instance.ShowGameClear();
-            UIManager.instance.UpdateTotalScore(score);
         }
     }
 

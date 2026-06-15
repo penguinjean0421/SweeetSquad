@@ -6,8 +6,6 @@ public class ItemHp : MonoBehaviour, IItemEffect
 
     public void ApplyEffect()
     {
-        // 파티클 넣기
-
         if (GameManager.instance.currentHealth < GameManager.instance.maxHealth)
         {
             GameManager.instance.currentHealth = Mathf.Min(GameManager.instance.currentHealth + HpValue, GameManager.instance.maxHealth);
