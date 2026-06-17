@@ -5,10 +5,13 @@ public class BackgroundScroll : MonoBehaviour
     public Transform player;
     public Transform mainCamera;
 
-    public float scrollSpeed = 0.1f;
+    [Header("Scroll Speed")]
+    public float scrollSpeedX = 0.1f;
+    public float scrollSpeedY = 0.1f;
 
     Material backgroundMaterial;
-    float lastCameraX;
+
+    Vector2 lastCameraPos;
 
     void Awake()
     {
@@ -22,22 +25,26 @@ public class BackgroundScroll : MonoBehaviour
             mainCamera = Camera.main.transform;
         }
 
-        lastCameraX = mainCamera.position.x;
+        lastCameraPos = new Vector2(mainCamera.position.x, mainCamera.position.y);
     }
 
     void LateUpdate()
     {
-        if (player == null || mainCamera == null) { return; }
+        if (mainCamera == null) { return; }
+
+        transform.position = new Vector3(mainCamera.position.x, mainCamera.position.y, transform.position.z);
 
 
-        float cameraMovementX = mainCamera.position.x - lastCameraX;
-
-        transform.position = new Vector3(mainCamera.position.x, transform.position.y, transform.position.z);
+        float cameraMovementX = mainCamera.position.x - lastCameraPos.x;
+        float cameraMovementY = mainCamera.position.y - lastCameraPos.y;
 
         Vector2 offset = backgroundMaterial.GetTextureOffset("_BaseMap");
-        offset.x += cameraMovementX * scrollSpeed;
+
+        offset.x += cameraMovementX * scrollSpeedX;
+        offset.y += cameraMovementY * scrollSpeedY;
+
         backgroundMaterial.SetTextureOffset("_BaseMap", offset);
 
-        lastCameraX = mainCamera.position.x;
+        lastCameraPos = new Vector2(mainCamera.position.x, mainCamera.position.y);
     }
 }

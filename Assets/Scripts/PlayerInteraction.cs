@@ -38,30 +38,28 @@ public class PlayerInteraction : MonoBehaviour
         if (collision.CompareTag("DeadZone"))
         {
             GameManager.instance.HealthDown();
-            if (GameManager.instance.currentHealth >= 1)
-            {
-                GameManager.instance.PlayerReposition();
-            }
+            GameManager.instance.PlayerReposition();
         }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Enemy") && collision.gameObject.layer != playerDamagedLayer)
+        if (collision.gameObject.layer == playerDamagedLayer) { return; }
+
+        if (collision.gameObject.CompareTag("Spike")) { TryTakeDamage(collision.transform.position); }
+
+        if (collision.gameObject.CompareTag("Enemy"))
         {
-            if (rigid.linearVelocity.y < 0 && transform.position.y > collision.transform.position.y)
+            Vector2 normal = collision.GetContact(0).normal;
+
+            if (rigid.linearVelocity.y < 0 && normal.y > 0.5f)
             {
                 OnAttack(collision.transform);
             }
-            else if (!playerHealth.isInvincible)
+            else
             {
-                playerHealth.OnDamaged(collision.transform.position);
+                TryTakeDamage(collision.transform.position);
             }
-        }
-
-        if (collision.gameObject.CompareTag("Spike") && collision.gameObject.layer != playerDamagedLayer && !playerHealth.isInvincible)
-        {
-            playerHealth.OnDamaged(collision.transform.position);
         }
     }
 
@@ -74,6 +72,11 @@ public class PlayerInteraction : MonoBehaviour
             enemyHealth.OnDamaged();
             playerMovement.AddStompForce();
         }
+    }
+
+    void TryTakeDamage(Vector3 targetPosition)
+    {
+        if (!playerHealth.isInvincible) { playerHealth.OnDamaged(targetPosition); }
     }
 
     void HandleItem(GameObject item)

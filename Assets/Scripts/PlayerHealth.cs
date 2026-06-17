@@ -1,5 +1,4 @@
 using System.Collections;
-using NUnit.Framework;
 using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
@@ -35,10 +34,9 @@ public class PlayerHealth : MonoBehaviour
         StartCoroutine(InvincibleCooldownCo());
 
         GameManager.instance.HealthDown();
-        gameObject.layer = damagedLayer; // 무적 레이어로 변경
-        spriteRenderer.color = new Color(1, 1, 1, 0.4f); // 투명화
+        gameObject.layer = damagedLayer;
+        spriteRenderer.color = new Color(1, 1, 1, 0.4f);
 
-        // 튕겨나가는 리액션 힘
         int direction = transform.position.x - targetPos.x > 0 ? 1 : -1;
         rigid.AddForce(new Vector2(direction, 1) * 7, ForceMode2D.Impulse);
 

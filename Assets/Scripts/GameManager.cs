@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
 
     [Header("Player")]
     public GameObject player;
+    PlayerHealth playerHp;
+    PlayerMovement playerMove;
 
     [Header("Hp")]
     public int maxHealth;
@@ -14,7 +16,6 @@ public class GameManager : MonoBehaviour
     [Header("Stage")]
     public GameObject[] stages;
     int stageIndex;
-    int lastStage;
 
     [Header("Score")]
     public int score;
@@ -28,18 +29,32 @@ public class GameManager : MonoBehaviour
         else
         {
             Destroy(gameObject);
+            return;
+        }
+
+        if (player != null)
+        {
+            playerHp = player.GetComponent<PlayerHealth>();
+            playerMove = player.GetComponent<PlayerMovement>();
         }
     }
 
     void Start()
     {
         Time.timeScale = 0f;
+
+        for (int i = 0; i < stages.Length; i++)
+        {
+            stages[i].SetActive(false);
+        }
+
         player.SetActive(false);
     }
 
     public void GameStart()
     {
         Time.timeScale = 1f;
+        stageIndex = 0;
         currentHealth = maxHealth;
 
         UIManager.instance.InitHearts(currentHealth);
@@ -54,11 +69,10 @@ public class GameManager : MonoBehaviour
     {
         if (stageIndex < stages.Length - 1)
         {
-            stages[lastStage].SetActive(false);
+            stages[stageIndex].SetActive(false);
 
             stageIndex++;
             stages[stageIndex].SetActive(true);
-            lastStage = stageIndex;
 
             UIManager.instance.UpdateStage(stageIndex);
             PlayerReposition();
@@ -72,19 +86,19 @@ public class GameManager : MonoBehaviour
 
     public void HealthDown()
     {
-        if (currentHealth > 1)
-        {
-            currentHealth--;
-            UIManager.instance.UpdateHp(currentHealth);
-        }
-        else { GameOver(); }
+        if (currentHealth <= 0) { return; }
+
+        currentHealth--;
+        UIManager.instance.UpdateHp(currentHealth);
+
+        if (currentHealth <= 0) { GameOver(); }
     }
 
     public void GameOver()
     {
-        PlayerHealth playerHp = player.GetComponent<PlayerHealth>();
+        Time.timeScale = 0f;
 
-        playerHp.OnDie();
+        if (playerHp != null) playerHp.OnDie();
         stages[stageIndex].SetActive(false);
 
         UIManager.instance.ShowGameOver();
@@ -92,8 +106,10 @@ public class GameManager : MonoBehaviour
 
     public void PlayerReposition()
     {
-        PlayerMovement playerMove = player.GetComponent<PlayerMovement>();
-        playerMove.transform.position = new Vector3(0, 1, 0);
-        playerMove.VelocityZero();
+        if (playerMove != null)
+        {
+            playerMove.transform.position = new Vector3(0, 1, 0);
+            playerMove.VelocityZero();
+        }
     }
 }
