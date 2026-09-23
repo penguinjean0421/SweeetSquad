@@ -1,6 +1,5 @@
 using UnityEngine;
-using Unity.Cinemachine; // 유니티 6의 시네머신 네임스페이스
-
+using Unity.Cinemachine;
 public class CameraController : MonoBehaviour
 {
     [SerializeField] private CinemachineCamera cinemachineCamera;

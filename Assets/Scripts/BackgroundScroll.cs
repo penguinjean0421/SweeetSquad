@@ -7,7 +7,6 @@ public class BackgroundScroll : MonoBehaviour
 
     [Header("Scroll Speed")]
     public float scrollSpeedX = 0.1f;
-    public float scrollSpeedY = 0.1f;
 
     Material backgroundMaterial;
 
@@ -32,16 +31,13 @@ public class BackgroundScroll : MonoBehaviour
     {
         if (mainCamera == null) { return; }
 
-        transform.position = new Vector3(mainCamera.position.x, mainCamera.position.y, transform.position.z);
-
+        transform.position = new Vector3(mainCamera.position.x, mainCamera. position.y, transform.position.z);
 
         float cameraMovementX = mainCamera.position.x - lastCameraPos.x;
-        float cameraMovementY = mainCamera.position.y - lastCameraPos.y;
 
         Vector2 offset = backgroundMaterial.GetTextureOffset("_BaseMap");
 
-        offset.x += cameraMovementX * scrollSpeedX;
-        offset.y += cameraMovementY * scrollSpeedY;
+        offset.x += cameraMovementX * scrollSpeedX;;
 
         backgroundMaterial.SetTextureOffset("_BaseMap", offset);
 
